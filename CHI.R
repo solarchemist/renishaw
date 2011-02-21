@@ -349,7 +349,7 @@ cv2df <- function(cvfilename) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(segment = factor(s), cycle = ceiling(factor(s)/2),
+               data.frame(segment = factor(s), cycle = factor(ceiling(s/2)),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
