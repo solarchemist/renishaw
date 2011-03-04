@@ -22,6 +22,8 @@ Raman2df <- function(datafilename) {
    #####
    # A nice algorithm that extracts the filename from the datafilename argument
    # and uses that as a sampleid in the returned dataframe
+   # THIS SHOULD PROBABLY BE CONVERTED INTO A STAND-ALONE FUNCTION
+   # Also make sure it works for vectors as well as single strings
    #####
    rgxp.sampleid <- "[^/]*(?=\\.\\w*)" ## THIS REQUIRES perl=TRUE
    # Regular expression that extracts the filename out of a full path.

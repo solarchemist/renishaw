@@ -74,6 +74,7 @@ Celsius2Kelvin <- function(Celsius) {
       Celsius <- -273.15
    }
    Kelvin <- Celsius + 273.15
+   return(Kelvin)
 }
 
 
@@ -89,6 +90,7 @@ Kelvin2Celsius <- function(Kelvin) {
       Kelvin <- 0
    }
    Celsius <- Kelvin - 273.15
+   return(Celsius)
 }
 
 
@@ -98,6 +100,7 @@ Kelvin2Celsius <- function(Kelvin) {
 as.radians <- function(degrees) {
    # Converts from degrees to radians
    radians <- degrees * (pi / 180)
+   return(radians)
 }
 
 
@@ -106,7 +109,8 @@ as.radians <- function(degrees) {
 ##################################################
 as.degrees <- function(radians) {
    # Converts from radians to degrees
-   radians <- radians * (180 / pi)
+   degrees <- radians * (180 / pi)
+   return(degrees)
 }
 
 

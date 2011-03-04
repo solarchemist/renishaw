@@ -158,7 +158,7 @@ chronocm2df <- function(datafilename) {
 ##################################################
 ################# chronoamp2df ###################
 ##################################################
-chronoamp2df <- function(datafilename) {
+chronoamp2df <- function(datafilename, wearea = 1) {
    # Function description: chronoamperometry data
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
@@ -201,6 +201,9 @@ chronoamp2df <- function(datafilename) {
       close(zz)
    }
    names(ff) <- c("step", "time", "current")
+   # Calculate current density
+   currentdensity <- ff$current / wearea
+   ff <- cbind(ff, currentdensity = currentdensity)
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -239,7 +242,7 @@ chronoamp2df <- function(datafilename) {
 ##################################################
 ############### amperometry2df ###################
 ##################################################
-amperometry2df <- function(datafilename) {
+amperometry2df <- function(datafilename, wearea = 1) {
    # Function description: for recorded amperometric i-T curves
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
@@ -281,6 +284,9 @@ amperometry2df <- function(datafilename) {
       close(zz)
    }
    names(ff) <- c("time", "current")
+   # Calculate current density
+   currentdensity <- ff$current / wearea
+   ff <- cbind(ff, currentdensity = currentdensity)
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -312,7 +318,7 @@ amperometry2df <- function(datafilename) {
 ##################################################
 #################### cv2df #######################
 ##################################################
-cv2df <- function(cvfilename) {
+cv2df <- function(cvfilename, wearea = 1) {
    # Function description: 
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
@@ -355,6 +361,9 @@ cv2df <- function(cvfilename) {
       close(zz)
    }
    names(ff) <- c("segment", "cycle", "potential", "current", "charge")
+   # Calculate current density
+   currentdensity <- ff$current / wearea
+   ff <- cbind(ff[, 1:4], currentdensity = currentdensity, ff[, 5])
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -394,7 +403,7 @@ cv2df <- function(cvfilename) {
 ##################################################
 ################### lsv2df #######################
 ##################################################
-lsv2df <- function(lsvfilename) {
+lsv2df <- function(lsvfilename, wearea = 1) {
    # Function description: 
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
@@ -437,6 +446,9 @@ lsv2df <- function(lsvfilename) {
       close(zz)
    }
    names(ff) <- c("segment", "potential", "current", "charge")
+   # Calculate current density
+   currentdensity <- ff$current / wearea
+   ff <- cbind(ff[, 1:3], currentdensity = currentdensity, ff[, 4])
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
