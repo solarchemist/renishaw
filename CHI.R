@@ -3,6 +3,7 @@
 # Taha Ahmed, Jan 2011 - Feb 2011
 
 # CONTENTS
+source("/home/taha/chepec/chetex/common/R/common.R")
 # >>>> ocp2df
 # >>>> chronocm2df
 # >>>> chronoamp2df
@@ -25,6 +26,8 @@ ocp2df <- function(datafilename) {
    datafile <- file(datafilename, "r")
    chifile <- readLines(datafile, n = -1) #read all lines of input file
    close(datafile)
+   #
+   sampleid <- ProvideSampleId(datafilename)
    #
    rgxp.number <- "^\\-?\\d\\.\\d+[e,]"
    # regexp that matches a decimal number at the beginning of the line.
@@ -53,11 +56,11 @@ ocp2df <- function(datafilename) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(matrix(scan(zz, what = numeric(), sep = ","),
+               data.frame(sampleid, matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 2, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("time", "potential")
+   names(ff) <- c("sampleid", "time", "potential")
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -91,6 +94,8 @@ chronocm2df <- function(datafilename) {
    chifile <- readLines(datafile, n = -1) #read all lines of input file
    close(datafile)
    #
+   sampleid <- ProvideSampleId(datafilename)
+   #
    rgxp.number <- "^\\-?\\d\\.\\d+[e,]"
    # regexp that matches a decimal number at the beginning of the line.
    # Matches numbers with or without a negative sign (hyphen), 
@@ -118,12 +123,12 @@ chronocm2df <- function(datafilename) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(step = factor(s),
+               data.frame(sampleid, step = factor(s),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 2, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("step", "time", "charge")
+   names(ff) <- c("sampleid", "step", "time", "charge")
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -168,6 +173,8 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    chifile <- readLines(datafile, n = -1) #read all lines of input file
    close(datafile)
    #
+   sampleid <- ProvideSampleId(datafilename)
+   #
    rgxp.number <- "^\\-?\\d\\.\\d+[e,]"
    # regexp that matches a decimal number at the beginning of the line.
    # Matches numbers with or without a negative sign (hyphen), 
@@ -195,12 +202,12 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(step = factor(s),
+               data.frame(sampleid, step = factor(s),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 2, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("step", "time", "current")
+   names(ff) <- c("sampleid", "step", "time", "current")
    # Calculate current density
    currentdensity <- ff$current / wearea
    ff <- cbind(ff, currentdensity = currentdensity)
@@ -252,6 +259,8 @@ amperometry2df <- function(datafilename, wearea = 1) {
    chifile <- readLines(datafile, n = -1) #read all lines of input file
    close(datafile)
    #
+   sampleid <- ProvideSampleId(datafilename)
+   #
    rgxp.number <- "^\\-?\\d\\.\\d+[e,]"
    # regexp that matches a decimal number at the beginning of the line.
    # Matches numbers with or without a negative sign (hyphen), 
@@ -279,11 +288,11 @@ amperometry2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(matrix(scan(zz, what = numeric(), sep = ","),
+               data.frame(sampleid, matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 2, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("time", "current")
+   names(ff) <- c("sampleid", "time", "current")
    # Calculate current density
    currentdensity <- ff$current / wearea
    ff <- cbind(ff, currentdensity = currentdensity)
@@ -318,15 +327,17 @@ amperometry2df <- function(datafilename, wearea = 1) {
 ##################################################
 #################### cv2df #######################
 ##################################################
-cv2df <- function(cvfilename, wearea = 1) {
+cv2df <- function(datafilename, wearea = 1) {
    # Function description: 
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
    # charges in Coulombs, time in seconds, etc.
    #
-   cvfile <- file(cvfilename, "r")
+   cvfile <- file(datafilename, "r")
    chifile <- readLines(cvfile, n = -1) #read all lines of input file
    close(cvfile)
+   #
+   sampleid <- ProvideSampleId(datafilename)
    #
    rgxp.number <- "^\\-?\\d\\.\\d+,"
    # regexp that matches a decimal number at the beginning of the line.
@@ -355,15 +366,15 @@ cv2df <- function(cvfilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(segment = factor(s), cycle = factor(ceiling(s/2)),
+               data.frame(sampleid, segment = factor(s), cycle = factor(ceiling(s/2)),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("segment", "cycle", "potential", "current", "charge")
+   names(ff) <- c("sampleid", "segment", "cycle", "potential", "current", "charge")
    # Calculate current density
    currentdensity <- ff$current / wearea
-   ff <- cbind(ff[, 1:4], currentdensity = currentdensity, ff[, 5])
+   ff <- cbind(ff[, 1:5], currentdensity = currentdensity, charge = ff[, 6])
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
@@ -403,15 +414,17 @@ cv2df <- function(cvfilename, wearea = 1) {
 ##################################################
 ################### lsv2df #######################
 ##################################################
-lsv2df <- function(lsvfilename, wearea = 1) {
+lsv2df <- function(datafilename, wearea = 1) {
    # Function description: 
    # CH Instruments potentiostat records all data using standard SI units,
    # so all potential values are in volts, currents are in amperes,
    # charges in Coulombs, time in seconds, etc.
    #
-   lsvfile <- file(lsvfilename, "r")
+   lsvfile <- file(datafilename, "r")
    chifile <- readLines(lsvfile, n = -1) #read all lines of input file
    close(lsvfile)
+   #
+   sampleid <- ProvideSampleId(datafilename)
    #
    rgxp.number <- "^\\-?\\d\\.\\d+,"
    # regexp that matches a decimal number at the beginning of the line.
@@ -440,15 +453,15 @@ lsv2df <- function(lsvfilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(segment = factor(s),
+               data.frame(sampleid, segment = factor(s),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("segment", "potential", "current", "charge")
+   names(ff) <- c("sampleid", "segment", "potential", "current", "charge")
    # Calculate current density
    currentdensity <- ff$current / wearea
-   ff <- cbind(ff[, 1:3], currentdensity = currentdensity, ff[, 4])
+   ff <- cbind(ff[, 1:4], currentdensity = currentdensity, charge = ff[, 5])
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
