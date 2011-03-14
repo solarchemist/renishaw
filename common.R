@@ -3,6 +3,7 @@
 # Taha Ahmed, Jan 2011
 
 # CONTENTS
+# >>>> It2charge
 # >>>> ProvideSampleId
 # >>>> ConvertRefPot
 # >>>> Celsius2Kelvin
@@ -10,6 +11,31 @@
 # >>>> as.radians
 # >>>> as.degrees
 # >>>> molarity2mass
+
+
+
+##################################################
+################### It2charge ####################
+##################################################
+It2charge <- function (current, time) {
+   ## Calculates charge etc. for amperometric data
+   ## current may be a current or a current density
+   ## (up to the calling function to keep track of which it is)
+   # Calculate the difference of the time vector
+   timediff <- c(time[1], diff(time))
+   # timediff times the current gives the charge,
+   # since the time vector can be considered as
+   # the cumulative time, while we need to multiply
+   # the current with the time elapsed since the last 
+   # current measurement (the timediff).
+   charge <- current * timediff
+   differential <- cumsum(charge) / time
+   # Prepare the return dataframe
+   ff <- data.frame(time = time, timediff = timediff, 
+      current = current, charge = charge, 
+      sumcharge = cumsum(charge), dQdt = differential)
+   return(ff)
+}
 
 
 
