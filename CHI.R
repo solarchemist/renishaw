@@ -298,10 +298,7 @@ amperometry2df <- function(datafilename, wearea = 1) {
    ff <- cbind(ff, currentdensity = currentdensity)
    # Calculate charge densities and differentials
    charge.df <- It2charge(ff$currentdensity, ff$time)
-   ff <- cbind(ff, timediff = charge.df$timediff, 
-      chargedensity = charge$charge, 
-      sumchargedensity = charge$sumcharge, 
-      dQdt = charge$dQdt)
+   ff <- cbind(ff, charge.df)
    #
    ### Collect attributes of this experiment
    # These attributes are specific for each kind of experiment,
