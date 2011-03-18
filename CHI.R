@@ -369,44 +369,53 @@ cv2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(sampleid, segment = factor(s), cycle = factor(ceiling(s/2)),
+               data.frame(sampleid, segment = s, cycle = as.integer(ceiling(s/2)),
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
    }
+   # Column names after initial assignment
    names(ff) <- c("sampleid", "segment", "cycle", "potential", "current", "charge")
    # Calculate current density
    currentdensity <- ff$current / wearea
    ff <- cbind(ff[, 1:5], currentdensity = currentdensity, charge = ff[, 6])
-   #
-   ### Collect attributes of this experiment
-   # These attributes are specific for each kind of experiment,
-   # be careful when adapting to other electrochemical data
-   rgxp.attr <- c("^Init\\sE\\s\\(V\\)",
-                  "^High\\sE\\s\\(V\\)",
-                  "^Low\\sE\\s\\(V\\)",
-                  "^Init\\sP/N",
-                  "^Scan\\sRate\\s\\(V/s\\)",
-                  "^Segment\\s=",
-                  "^Sample\\sInterval\\s\\(V\\)",
-                  "^Quiet\\sTime\\s\\(sec\\)",
-                  "^Sensitivity\\s\\(A/V\\)")
-   names.attr <- c("InitE",
-                   "HighE",
-                   "LowE",
-                   "InitPN",
-                   "ScanRate",
-                   "Segments",
-                   "SamplingInterval",
-                   "QuietTime",
-                   "Sensitivity")
-   for (n in 1:length(rgxp.attr)) {
-      attrow.idx <- regexpr(rgxp.attr[n], chifile)
-      attrow.len <- attr(attrow.idx, "match.length")
-      attr(attrow.idx, "match.length") <- NULL
-      attr(ff, names.attr[n]) <- strsplit(chifile[which(attrow.idx == 1)],
-         "\\s=\\s")[[1]][2]
-   }
+   ## Collect attributes of this experiment
+   # InitE (volt)
+   position.InitE <- regexpr("^Init\\sE\\s\\(V\\)", chifile)
+   InitE <- as.numeric(strsplit(chifile[which(position.InitE == 1)], "\\s=\\s")[[1]][2])
+   ff$InitE <- InitE
+   # HighE (volt)
+   position.HighE <- regexpr("^High\\sE\\s\\(V\\)", chifile)
+   HighE <- as.numeric(strsplit(chifile[which(position.HighE == 1)], "\\s=\\s")[[1]][2])
+   ff$HighE <- HighE
+   # LowE (volt)
+   position.LowE <- regexpr("^Low\\sE\\s\\(V\\)", chifile)
+   LowE <- as.numeric(strsplit(chifile[which(position.LowE == 1)], "\\s=\\s")[[1]][2])
+   ff$LowE <- LowE
+   # InitPN (positive or negative)
+   position.InitPN <- regexpr("^Init\\sP/N", chifile)
+   InitPN <- strsplit(chifile[which(position.InitPN == 1)], "\\s=\\s")[[1]][2]
+   ff$InitPN <- InitPN
+   # ScanRate (volt per second)
+   position.ScanRate <- regexpr("^Scan\\sRate\\s\\(V/s\\)", chifile)
+   ScanRate <- as.numeric(strsplit(chifile[which(position.ScanRate == 1)], "\\s=\\s")[[1]][2])
+   ff$ScanRate <- ScanRate
+   # Segments, number of
+   position.Segment <- regexpr("^Segment\\s=", chifile)
+   Segment <- as.numeric(strsplit(chifile[which(position.Segment == 1)], "\\s=\\s")[[1]][2])
+   ff$Segment <- Segment
+   # SampleInterval (volt)
+   position.SampleInterval <- regexpr("^Sample\\sInterval\\s\\(V\\)", chifile)
+   SampleInterval <- as.numeric(strsplit(chifile[which(position.SampleInterval == 1)], "\\s=\\s")[[1]][2])
+   ff$SampleInterval <- SampleInterval
+   # Quiet time (seconds)
+   position.QuietTime <- regexpr("^Quiet\\sTime\\s\\(sec\\)", chifile)
+   QuietTime <- as.numeric(strsplit(chifile[which(position.QuietTime == 1)], "\\s=\\s")[[1]][2])
+   ff$QuietTime <- QuietTime
+   # Sensitivity (ampere per volt)
+   position.Sensitivity <- regexpr("^Sensitivity\\s\\(A/V\\)", chifile)
+   Sensitivity <- as.numeric(strsplit(chifile[which(position.Sensitivity == 1)], "\\s=\\s")[[1]][2])
+   ff$Sensitivity <- Sensitivity
    #
    return(ff)
 }
