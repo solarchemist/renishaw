@@ -401,9 +401,9 @@ cv2df <- function(datafilename, wearea = 1) {
    ScanRate <- as.numeric(strsplit(chifile[which(position.ScanRate == 1)], "\\s=\\s")[[1]][2])
    ff$ScanRate <- ScanRate
    # Segments, number of
-   position.Segment <- regexpr("^Segment\\s=", chifile)
-   Segment <- as.numeric(strsplit(chifile[which(position.Segment == 1)], "\\s=\\s")[[1]][2])
-   ff$Segment <- Segment
+   position.Segments <- regexpr("^Segment\\s=", chifile)
+   Segments <- as.numeric(strsplit(chifile[which(position.Segments == 1)], "\\s=\\s")[[1]][2])
+   ff$Segments <- Segments
    # SampleInterval (volt)
    position.SampleInterval <- regexpr("^Sample\\sInterval\\s\\(V\\)", chifile)
    SampleInterval <- as.numeric(strsplit(chifile[which(position.SampleInterval == 1)], "\\s=\\s")[[1]][2])
