@@ -3,7 +3,7 @@
 # Taha Ahmed, Jan 2011
 
 # CONTENTS
-# >>>> LinearBaseline
+# >>>> LinearBaseline (deprecated)
 # >>>> int2padstr
 # >>>> It2charge
 # >>>> ProvideSampleId

@@ -369,13 +369,13 @@ cv2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(sampleid, segment = s, cycle = as.integer(ceiling(s/2)),
+               data.frame(sampleid, cycle = as.integer(ceiling(s/2)), segment = s,
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
    }
    # Column names after initial assignment
-   names(ff) <- c("sampleid", "segment", "cycle", "potential", "current", "charge")
+   names(ff) <- c("sampleid", "cycle", "segment", "potential", "current", "charge")
    # Calculate current density
    currentdensity <- ff$current / wearea
    ff <- cbind(ff[, 1:5], currentdensity = currentdensity, charge = ff[, 6])
