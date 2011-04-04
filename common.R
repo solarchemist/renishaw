@@ -70,6 +70,7 @@ int2padstr <- function (ii, pchr, w) {
 ################### It2charge ####################
 ##################################################
 It2charge <- function (time, current) {
+   ## **** STOP USING THIS FUNCTION *** CAUSED WEIRD, UNREPRODUCIBLE ERRORS /110304
    ## Description:
    ##    Calculates cumulative charge, differentials, etc. from
    ##    amperometric data (current and time).
@@ -96,6 +97,7 @@ It2charge <- function (time, current) {
    # Return value
    ff <- data.frame(timediff = timediff, 
       dIdt = dIdt, charge = charge, 
+      # perhaps it is more correct to calculate cumsum of the absolute charge?
       sumcharge = cumsum(charge))
    return(ff)
 }
