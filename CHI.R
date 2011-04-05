@@ -18,10 +18,36 @@ source("/home/taha/chepec/chetex/common/R/common.R")
 ################### ocp2df #######################
 ##################################################
 ocp2df <- function(datafilename) {
-   # Function description: for recorded amperometric i-T curves
-   # CH Instruments potentiostat records all data using standard SI units,
-   # so all potential values are in volts, currents are in amperes,
-   # charges in Coulombs, time in seconds, etc.
+   ## Description:
+   ##   Reads potential-time data (from CHI 760 potentiostat)
+   ##   and returns a dataframe with the data and 
+   ##   the data attributes (experimental conditions).
+   ## Usage:
+   ##   ocp2df(datafilename)
+   ## Arguments:
+   ##   datafilename: text string with full path to experimental file
+   ## Value:
+   ##   Dataframe with the following columns (and no extra attributes):
+   ##   $ sampleid        : chr
+   ##   $ time            : num
+   ##   $ current         : num
+   ##   $ currentdensity  : num
+   ##   $ timediff        : num
+   ##   $ dIdt            : num
+   ##   $ didt            : num
+   ##   $ charge          : num
+   ##   $ chargedensity   : num
+   ##   $ InitE           : num
+   ##   $ SampleInterval  : num
+   ##   $ RunTime         : num
+   ##   $ QuietTime       : num
+   ##   $ Sensitivity     : num
+   ## Note:
+   ##   The CH Instruments 760 potentiostat records all data 
+   ##   using standard SI units, therefore this function
+   ##   assumes all potential values to be in volts, 
+   ##   currents to be in amperes, charges in Coulombs, 
+   ##   time in seconds, and so on.
    #
    datafile <- file(datafilename, "r")
    chifile <- readLines(datafile, n = -1) #read all lines of input file
@@ -63,18 +89,10 @@ ocp2df <- function(datafilename) {
    names(ff) <- c("sampleid", "time", "potential")
    #
    ### Collect attributes of this experiment
-   # These attributes are specific for each kind of experiment,
-   # be careful when adapting to other electrochemical data
-   rgxp.attr <- c("^Run\\sTime\\s\\(sec\\)")
-   names.attr <- c("RunTime")
-   for (n in 1:length(rgxp.attr)) {
-      attrow.idx <- regexpr(rgxp.attr[n], chifile)
-      attrow.len <- attr(attrow.idx, "match.length")
-      attr(attrow.idx, "match.length") <- NULL
-      # attrow.idx should now contain only one matching row
-      attr(ff, names.attr[n]) <- strsplit(chifile[which(attrow.idx == 1)],
-         "\\s=\\s")[[1]][2]
-   }
+   # RunTime (sec)
+   position.RunTime <- regexpr("^Run\\sTime\\s\\(sec\\)", chifile)
+   RunTime <- as.numeric(strsplit(chifile[which(position.RunTime == 1)], "\\s=\\s")[[1]][2])
+   ff$RunTime <- RunTime
    #
    return(ff)
 }

@@ -5,7 +5,7 @@
 # CONTENTS
 # >>>> LinearBaseline (deprecated)
 # >>>> int2padstr
-# >>>> It2charge
+# >>>> It2charge **** STOP USING THIS FUNCTION ***
 # >>>> ProvideSampleId
 # >>>> ConvertRefPot
 # >>>> Celsius2Kelvin
