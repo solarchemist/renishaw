@@ -488,10 +488,38 @@ cv2df <- function(datafilename, wearea = 1) {
 ################### lsv2df #######################
 ##################################################
 lsv2df <- function(datafilename, wearea = 1) {
-   # Function description: 
-   # CH Instruments potentiostat records all data using standard SI units,
-   # so all potential values are in volts, currents are in amperes,
-   # charges in Coulombs, time in seconds, etc.
+   ## Description:
+   ##   Reads LSV datafiles from CHI 760 potentiostat
+   ##   (potential, current, and charge)
+   ##   and returns a dataframe with the data, 
+   ##   the data attributes (experimental conditions),
+   ##   and calculated current density and charge density.
+   ## Usage:
+   ##   lsv2df(datafilename, wearea)
+   ## Arguments:
+   ##   datafilename: text string with full path to experimental file
+   ##         wearea: (optional) area of working electrode (in square centimeter)
+   ## Value:
+   ##   Dataframe with the following columns (and no extra attributes):
+   ##   $ sampleid        : chr
+   ##   $ segment         : num
+   ##   $ potential       : num
+   ##   $ current         : num
+   ##   $ charge          : num
+   ##   $ currentdensity  : num
+   ##   $ chargedensity   : num 
+   ##   $ InitE           : num
+   ##   $ FinalE          : num
+   ##   $ ScanRate        : num
+   ##   $ SampleInterval  : num
+   ##   $ QuietTime       : num
+   ##   $ Sensitivity     : num
+   ## Note:
+   ##   The CH Instruments 760 potentiostat records all data 
+   ##   using standard SI units, therefore this function
+   ##   assumes all potential values to be in volts, 
+   ##   currents to be in amperes, charges in Coulombs, 
+   ##   time in seconds, and so on.
    #
    lsvfile <- file(datafilename, "r")
    chifile <- readLines(lsvfile, n = -1) #read all lines of input file
@@ -526,7 +554,8 @@ lsv2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(sampleid, segment = factor(s),
+               data.frame(stringsAsFactors = FALSE,
+               sampleid, segment = s,
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 3, byrow = T)))
       close(zz)
@@ -534,30 +563,36 @@ lsv2df <- function(datafilename, wearea = 1) {
    names(ff) <- c("sampleid", "segment", "potential", "current", "charge")
    # Calculate current density
    currentdensity <- ff$current / wearea
-   ff <- cbind(ff[, 1:4], currentdensity = currentdensity, charge = ff[, 5])
+   ff <- cbind(ff, currentdensity = currentdensity)
+   # Calculate charge density
+   chargedensity <- ff$charge / wearea
+   ff <- cbind(ff, chargedensity = chargedensity)
    #
    ### Collect attributes of this experiment
-   # These attributes are specific for each kind of experiment,
-   # be careful when adapting to other electrochemical data
-   rgxp.attr <- c("^Init\\sE\\s\\(V\\)",
-                  "^Final\\sE\\s\\(V\\)",
-                  "^Scan\\sRate\\s\\(V/s\\)",
-                  "^Sample\\sInterval\\s\\(V\\)",
-                  "^Quiet\\sTime\\s\\(sec\\)",
-                  "^Sensitivity\\s\\(A/V\\)")
-   names.attr <- c("InitE",
-                   "FinalE",
-                   "ScanRate",
-                   "SamplingInterval",
-                   "QuietTime",
-                   "Sensitivity")
-   for (n in 1:length(rgxp.attr)) {
-      attrow.idx <- regexpr(rgxp.attr[n], chifile)
-      attrow.len <- attr(attrow.idx, "match.length")
-      attr(attrow.idx, "match.length") <- NULL
-      attr(ff, names.attr[n]) <- strsplit(chifile[which(attrow.idx == 1)],
-         "\\s=\\s")[[1]][2]
-   }
+   # InitE (volt)
+   position.InitE <- regexpr("^Init\\sE\\s\\(V\\)", chifile)
+   InitE <- as.numeric(strsplit(chifile[which(position.InitE == 1)], "\\s=\\s")[[1]][2])
+   ff$InitE <- InitE
+   # FinalE (volt)
+   position.FinalE <- regexpr("^Final\\sE\\s\\(V\\)", chifile)
+   FinalE <- as.numeric(strsplit(chifile[which(position.FinalE == 1)], "\\s=\\s")[[1]][2])
+   ff$FinalE <- FinalE
+   # ScanRate (volt per second)
+   position.ScanRate <- regexpr("^Scan\\sRate\\s\\(V/s\\)", chifile)
+   ScanRate <- as.numeric(strsplit(chifile[which(position.ScanRate == 1)], "\\s=\\s")[[1]][2])
+   ff$ScanRate <- ScanRate
+   # SampleInterval (volt)
+   position.SampleInterval <- regexpr("^Sample\\sInterval\\s\\(V\\)", chifile)
+   SampleInterval <- as.numeric(strsplit(chifile[which(position.SampleInterval == 1)], "\\s=\\s")[[1]][2])
+   ff$SampleInterval <- SampleInterval
+   # Quiet time (seconds)
+   position.QuietTime <- regexpr("^Quiet\\sTime\\s\\(sec\\)", chifile)
+   QuietTime <- as.numeric(strsplit(chifile[which(position.QuietTime == 1)], "\\s=\\s")[[1]][2])
+   ff$QuietTime <- QuietTime
+   # Sensitivity (ampere per volt)
+   position.Sensitivity <- regexpr("^Sensitivity\\s\\(A/V\\)", chifile)
+   Sensitivity <- as.numeric(strsplit(chifile[which(position.Sensitivity == 1)], "\\s=\\s")[[1]][2])
+   ff$Sensitivity <- Sensitivity
    #
    return(ff)
 }
