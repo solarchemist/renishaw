@@ -501,19 +501,19 @@ lsv2df <- function(datafilename, wearea = 1) {
    ##         wearea: (optional) area of working electrode (in square centimeter)
    ## Value:
    ##   Dataframe with the following columns (and no extra attributes):
-   ##   $ sampleid        : chr
-   ##   $ segment         : num
-   ##   $ potential       : num
-   ##   $ current         : num
-   ##   $ charge          : num
-   ##   $ currentdensity  : num
-   ##   $ chargedensity   : num 
-   ##   $ InitE           : num
-   ##   $ FinalE          : num
-   ##   $ ScanRate        : num
-   ##   $ SampleInterval  : num
-   ##   $ QuietTime       : num
-   ##   $ Sensitivity     : num
+   ##   $ sampleid        : chr (id)
+   ##   $ segment         : num (id)
+   ##   $ potential       : num (measure)
+   ##   $ current         : num (measure)
+   ##   $ charge          : num (measure)
+   ##   $ currentdensity  : num (measure)
+   ##   $ chargedensity   : num (measure)
+   ##   $ InitE           : num (id)
+   ##   $ FinalE          : num (id)
+   ##   $ ScanRate        : num (id)
+   ##   $ SampleInterval  : num (id)
+   ##   $ QuietTime       : num (id)
+   ##   $ Sensitivity     : num (id)
    ## Note:
    ##   The CH Instruments 760 potentiostat records all data 
    ##   using standard SI units, therefore this function
