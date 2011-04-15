@@ -36,6 +36,12 @@ Raman2df <- function(datafilename) {
    ff <- ff[order(ff$shift), ]
    # And fix the row.names
    row.names(ff) <- seq(1, dim(ff)[1])
+   # Re-calculate the spectrum with evenly spaced points
+   # (so that the peak-finding algorithms of diffractometry package may be used)
+   ff$cshift <- approx(x = ff$shift, y = ff$counts, 
+      method = "linear", n = length(ff$shift))$x
+   ff$ccounts <- approx(x = ff$shift, y = ff$counts, 
+      method = "linear", n = length(ff$shift))$y 
    ##
    return(ff)
 }
