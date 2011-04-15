@@ -48,9 +48,9 @@ Raman2df <- function(datafilename) {
 ##################################################
 ################## Ramanpk #######################
 ##################################################
-Ramanpk <- function(Raman.exp, kerpk = 1, fitmaxiter = 50) {
+Ramanpk <- function(Raman.exp, kerpk = 1, fitmaxiter = 50, gam = 0.6, scl.factor = 0.1) {
    
-   Raman.base <- baselinefit(Raman.exp, tau=2.0, gam=1.0, scl.factor=1.2, maxwdth=400)
+   Raman.base <- baselinefit(Raman.exp, tau = 2.0, gam = gam, scl.factor = scl.factor, maxwdth = 200)
    
    # This loop deals with the output from baselinefit()
    # It makes a "melted" dataframe in long form for each 
