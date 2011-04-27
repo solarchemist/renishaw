@@ -110,7 +110,7 @@ scherrer <- function(integralbreadth, thth, wavelength = 1.54056, shapeconstant 
    # Function for calculating crystallite grain size from reflection data
    # ARGS: integralbreadth - vector with integral breadth of reflections (in degrees)
    #       thth            - vector with 2theta values of reflections (in degrees)
-   #       wavelength      - X-ray wavelength used (default 1.54056 Å, Cu Ka)
+   #       wavelength      - X-ray wavelength used (default 1.54056 A, Cu Ka)
    #       shapeconstant   - Scherrer constant (default spherical, ~0.9)
    # VALUE: vector with size parameters
    ## REQUIRES: as.radians(), source("/home/taha/chepec/chetex/common/R/common.R")
@@ -127,7 +127,7 @@ scherrer <- function(integralbreadth, thth, wavelength = 1.54056, shapeconstant 
 ##################################################
 pdf2df <- function(pdffile) {
    # Function for extracting information from ICDD PDF XML-files
-   # For example the PDF files produced by the PDF database at Ångström's X-ray lab
+   # For example the PDF files produced by the PDF database at Angstrom's X-ray lab
    # NOTE: sometimes intensity values are specified as less than some value.
    #       In those cases, this function simply strips the less-than character.
    # ARGS: pdffile (complete path and filename to PDF file)

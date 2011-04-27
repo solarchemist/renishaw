@@ -82,8 +82,9 @@ ocp2df <- function(datafilename) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(sampleid, matrix(scan(zz, what = numeric(), sep = ","),
-                  ncol = 2, byrow = T)))
+               data.frame(stringsAsFactors = FALSE,
+               sampleid, matrix(scan(zz, what = numeric(), sep = ","),
+               ncol = 2, byrow = T)))
       close(zz)
    }
    names(ff) <- c("sampleid", "time", "potential")
