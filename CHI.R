@@ -183,10 +183,37 @@ chronocm2df <- function(datafilename) {
 ################# chronoamp2df ###################
 ##################################################
 chronoamp2df <- function(datafilename, wearea = 1) {
-   # Function description: chronoamperometry data
-   # CH Instruments potentiostat records all data using standard SI units,
-   # so all potential values are in volts, currents are in amperes,
-   # charges in Coulombs, time in seconds, etc.
+   ## Description:
+   ##   Reads current-time data (from CHI 760 potentiostat)
+   ##   and returns a dataframe with the data and the 
+   ##   data attributes (experimental conditions).
+   ## Usage:
+   ##   chronoamp2df(datafilename, wearea)
+   ## Arguments:
+   ##   datafilename: text string with full path to experimental file
+   ##         wearea: (optional) area of working electrode (in square centimeters)
+   ## Value:
+   ##   Dataframe with the following columns (and no extra attributes):
+   ##   $ sampleid        : chr
+   ##   $ step            : num
+   ##   $ time            : num
+   ##   $ current         : num
+   ##   $ currentdensity  : num
+   ##   $ InitE           : num
+   ##   $ HighE           : num
+   ##   $ LowE            : num
+   ##   $ InitPN          : num
+   ##   $ Step            : num
+   ##   $ Pulse width     : num
+   ##   $ Sample interval : num
+   ##   $ Quiet Time      : num
+   ##   $ Sensitivity     : num
+   ## Note:
+   ##   The CH Instruments 760 potentiostat records all data 
+   ##   using standard SI units, therefore this function
+   ##   assumes all potential values to be in volts, 
+   ##   currents to be in amperes, charges in Coulombs, 
+   ##   time in seconds, and so on.
    #
    datafile <- file(datafilename, "r")
    chifile <- readLines(datafile, n = -1) #read all lines of input file
@@ -231,34 +258,44 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    currentdensity <- ff$current / wearea
    ff <- cbind(ff, currentdensity = currentdensity)
    #
+   
    ### Collect attributes of this experiment
-   # These attributes are specific for each kind of experiment,
-   # be careful when adapting to other electrochemical data
-   rgxp.attr <- c("^Init\\sE\\s\\(V\\)",
-                  "^High\\sE\\s\\(V\\)",
-                  "^Low\\sE\\s\\(V\\)",
-                  "^Init\\sP/N",
-                  "^Step\\s",
-                  "^Pulse\\sWidth\\s\\(sec\\)",
-                  "^Sample\\sInterval\\s\\(s\\)",
-                  "^Quiet\\sTime\\s\\(sec\\)",
-                  "^Sensitivity\\s\\(A/V\\)")
-   names.attr <- c("InitE",
-                   "HighE",
-                   "LowE",
-                   "InitPN",
-                   "Steps",
-                   "PulseWidth",
-                   "SamplingInterval",
-                   "QuietTime",
-                   "Sensitivity")
-   for (n in 1:length(rgxp.attr)) {
-      attrow.idx <- regexpr(rgxp.attr[n], chifile)
-      attrow.len <- attr(attrow.idx, "match.length")
-      attr(attrow.idx, "match.length") <- NULL
-      attr(ff, names.attr[n]) <- strsplit(chifile[which(attrow.idx == 1)],
-         "\\s=\\s")[[1]][2]
-   }
+   # InitE (volt)
+   position.InitE <- regexpr("^Init\\sE\\s\\(V\\)", chifile)
+   InitE <- as.numeric(strsplit(chifile[which(position.InitE == 1)], "\\s=\\s")[[1]][2])
+   ff$InitE <- InitE
+   # HighE (volt)
+   position.HighE <- regexpr("^High\\sE\\s\\(V\\)", chifile)
+   HighE <- as.numeric(strsplit(chifile[which(position.HighE == 1)], "\\s=\\s")[[1]][2])
+   ff$HighE <- HighE
+   # LowE (volt)
+   position.LowE <- regexpr("^Low\\sE\\s\\(V\\)", chifile)
+   LowE <- as.numeric(strsplit(chifile[which(position.LowE == 1)], "\\s=\\s")[[1]][2])
+   ff$LowE <- LowE
+   # InitPN
+   position.InitPN <- regexpr("^Init\\sP/N", chifile)
+   InitPN <- as.numeric(strsplit(chifile[which(position.InitPN == 1)], "\\s=\\s")[[1]][2])
+   ff$InitPN <- InitPN
+   # Step
+   position.Step <- regexpr("^Step\\s", chifile)
+   Step <- as.numeric(strsplit(chifile[which(position.Step == 1)], "\\s=\\s")[[1]][2])
+   ff$Step <- Step
+   # Pulse width (s)
+   position.PulseWidth <- regexpr("^Pulse\\sWidth\\s\\(sec\\)", chifile)
+   PulseWidth <- as.numeric(strsplit(chifile[which(position.PulseWidth == 1)], "\\s=\\s")[[1]][2])
+   ff$PulseWidth <- PulseWidth
+   # Sample interval (s)
+   position.SampleInterval <- regexpr("^Sample\\sInterval\\s\\(s\\)", chifile)
+   SampleInterval <- as.numeric(strsplit(chifile[which(position.SampleInterval == 1)], "\\s=\\s")[[1]][2])
+   ff$SampleInterval <- SampleInterval
+   # Quiet Time (s)
+   position.QuietTime <- regexpr("^Quiet\\sTime\\s\\(sec\\)", chifile)
+   QuietTime <- as.numeric(strsplit(chifile[which(position.QuietTime == 1)], "\\s=\\s")[[1]][2])
+   ff$QuietTime <- QuietTime
+   # Sensitivity (A/V)
+   position.Sensitivity <- regexpr("^Sensitivity\\s\\(A/V\\)", chifile)
+   Sensitivity <- as.numeric(strsplit(chifile[which(position.Sensitivity == 1)], "\\s=\\s")[[1]][2])
+   ff$Sensitivity <- Sensitivity
    #
    return(ff)
 }
