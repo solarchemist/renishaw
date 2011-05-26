@@ -202,7 +202,7 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    ##   $ InitE           : num
    ##   $ HighE           : num
    ##   $ LowE            : num
-   ##   $ InitPN          : num
+   ##   $ InitPN          : chr
    ##   $ Step            : num
    ##   $ Pulse width     : num
    ##   $ Sample interval : num
@@ -248,12 +248,12 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    for (s in 1:length(starts)) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
-               data.frame(sampleid, step = factor(s),
+               data.frame(sampleid, step.current = s,
                matrix(scan(zz, what = numeric(), sep = ","),
                   ncol = 2, byrow = T)))
       close(zz)
    }
-   names(ff) <- c("sampleid", "step", "time", "current")
+   names(ff) <- c("sampleid", "step.current", "time", "current")
    # Calculate current density
    currentdensity <- ff$current / wearea
    ff <- cbind(ff, currentdensity = currentdensity)
@@ -274,12 +274,12 @@ chronoamp2df <- function(datafilename, wearea = 1) {
    ff$LowE <- LowE
    # InitPN
    position.InitPN <- regexpr("^Init\\sP/N", chifile)
-   InitPN <- as.numeric(strsplit(chifile[which(position.InitPN == 1)], "\\s=\\s")[[1]][2])
+   InitPN <- strsplit(chifile[which(position.InitPN == 1)], "\\s=\\s")[[1]][2]
    ff$InitPN <- InitPN
-   # Step
-   position.Step <- regexpr("^Step\\s", chifile)
-   Step <- as.numeric(strsplit(chifile[which(position.Step == 1)], "\\s=\\s")[[1]][2])
-   ff$Step <- Step
+   # Steps (total number of steps)
+   position.Steps <- regexpr("^Step\\s", chifile)
+   Steps <- as.numeric(strsplit(chifile[which(position.Steps == 1)], "\\s=\\s")[[1]][2])
+   ff$Steps <- Steps
    # Pulse width (s)
    position.PulseWidth <- regexpr("^Pulse\\sWidth\\s\\(sec\\)", chifile)
    PulseWidth <- as.numeric(strsplit(chifile[which(position.PulseWidth == 1)], "\\s=\\s")[[1]][2])
