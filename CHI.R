@@ -38,6 +38,8 @@ mps2df <- function(datafilename, wearea = 1) {
    ##   $ didt            : num
    ##   $ charge          : num
    ##   $ chargedensity   : num
+   ##   $ PotentialSteps  : num
+   ##   $ TimeSteps       : num
    ##   $ Cycle           : num
    ##   $ SampleInterval  : num
    ##   $ QuietTime       : num
@@ -55,7 +57,7 @@ mps2df <- function(datafilename, wearea = 1) {
    #
    sampleid <- ProvideSampleId(datafilename)
    #
-   rgxp.number <- "^\\-?\\d\\.\\d+[e,]"
+   rgxp.number <- "^\\-?\\d+\\.\\d+[e,]"
    # regexp that matches a decimal number at the beginning of the line.
    # Matches numbers with or without a negative sign (hyphen), 
    # followed by one digit before the decimal, a decimal point,
@@ -110,16 +112,38 @@ mps2df <- function(datafilename, wearea = 1) {
       chargedensity = chargedensity)
    #
    ### Collect attributes of this experiment
-   # Potential steps  #### THIS NEEDS FIXING
+   # Potential steps
+   PotentialSteps <- ""
    positions.PotentialSteps <- regexpr("^E\\d+\\s\\(V\\)", chifile)
-   #PotentialSteps <- as.numeric(strsplit(chifile[which(positions.PotentialSteps == 1)], "\\s=\\s")[[1]][2])
-   #ff$PotentialSteps <- PotentialSteps
-   # Time steps  #### THIS NEEDS FIXING
-   positions.Time <- regexpr("^T\\d+\\s\\(s\\)", chifile)
-   # Cycle
-   position.Cycle <- regexpr("^Cycle", chifile)
-   Cycle <- as.numeric(strsplit(chifile[which(position.Cycle == 1)], "\\s=\\s")[[1]][2])
-   ff$Cycle <- Cycle
+   PotentialSteps <- paste("\\num{", strsplit(chifile[which(positions.PotentialSteps == 1)], 
+      "\\s=\\s")[[1]][2], "}", sep = "")
+   if (length(which(positions.PotentialSteps == 1)) > 1) {
+      for (i in 2:length(which(positions.PotentialSteps == 1))) {
+      PotentialSteps <- 
+         paste(PotentialSteps, 
+            paste("\\num{", strsplit(chifile[which(positions.PotentialSteps == 1)], 
+            "\\s=\\s")[[i]][2], "}", sep = ""), sep = ", ")
+      }
+   }
+   ff$PotentialSteps <- PotentialSteps
+   # Time steps
+   TimeSteps <- ""
+   positions.TimeSteps <- regexpr("^T\\d+\\s\\(s\\)", chifile)
+   TimeSteps <- paste("\\num{", strsplit(chifile[which(positions.TimeSteps == 1)], 
+      "\\s=\\s")[[1]][2], "}", sep = "")
+   if (length(which(positions.TimeSteps == 1)) > 1) {
+      for (i in 2:length(which(positions.TimeSteps == 1))) {
+      TimeSteps <- 
+         paste(TimeSteps, 
+            paste("\\num{", strsplit(chifile[which(positions.TimeSteps == 1)], 
+            "\\s=\\s")[[i]][2], "}", sep = ""), sep = ", ")
+      }
+   }
+   ff$TimeSteps <- TimeSteps
+   # Cycles
+   position.Cycles <- regexpr("^Cycle", chifile)
+   Cycles <- as.numeric(strsplit(chifile[which(position.Cycles == 1)], "\\s=\\s")[[1]][2])
+   ff$Cycles <- Cycles
    # Sample interval (s)
    position.SampleInterval <- regexpr("^Sample\\sInterval\\s\\(s\\)", chifile)
    SampleInterval <- as.numeric(strsplit(chifile[which(position.SampleInterval == 1)], "\\s=\\s")[[1]][2])
