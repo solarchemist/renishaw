@@ -4,21 +4,21 @@
 
 # CONTENTS
 source("/home/taha/chepec/chetex/common/R/common.R")
-# >>>> chronoamp2df
+# >>>> amp2df
 
 
 
 
 ##################################################
-################# chronoamp2df ###################
+#################### amp2df ######################
 ##################################################
-chronoamp2df <- function(datafilename, wearea = 1) {
+amp2df <- function(datafilename, wearea = 1) {
    ## Description:
    ##   Reads current-time data (from AUTOLAB potentiostat)
    ##   and returns a dataframe with the data and some 
    ##   calculated quantities based on the data.
    ## Usage:
-   ##   chronoamp2df(datafilename, wearea)
+   ##   amp2df(datafilename, wearea)
    ## Arguments:
    ##   datafilename: text string with full path to experimental file
    ##         wearea: (optional) area of working electrode (in square centimeters)
@@ -67,6 +67,7 @@ chronoamp2df <- function(datafilename, wearea = 1) {
       zz <- textConnection(chifile[starts[s]:ends[s]], "r")
       ff <- rbind(ff,
                data.frame(sampleid,
+                  stringsAsFactors = FALSE,                  
                   matrix(scan(zz, what = numeric(), sep = ""),
                      ncol = 2, byrow = T)))
       close(zz)
