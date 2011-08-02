@@ -147,6 +147,7 @@ pdf2df <- function(pdffile) {
    #        ApplicationVersion,
    #        pdfNumber,
    #        chemicalformula,
+   #        empiricalformula,
    #        wavelength
    #
    require(XML)
@@ -187,6 +188,7 @@ pdf2df <- function(pdffile) {
    attr(angles, "ApplicationVersion") <- xmlAttrs(pdf)[[2]]
    attr(angles, "pdfNumber") <- xmlValue(pdf[["pdf_data"]][["pdf_number"]])
    attr(angles, "chemicalformula") <- gsub("[ ]", "", xmlValue(pdf[["pdf_data"]][["chemical_formula"]]))
+   attr(angles, "empiricalformula") <- gsub("[ ]", "", xmlValue(pdf[["pdf_data"]][["empirical_formula"]]))
    attr(angles, "wavelength") <- as.numeric(xmlValue(pdf[["graphs"]][["wave_length"]]))
    # Caution: Do not subset. Subsetting causes all attributes to be lost.
    return(angles)
