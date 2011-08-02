@@ -1,0 +1,54 @@
+##################################################
+################### muxd2df ######################
+##################################################
+muxd2df <- function(uxdfile, range.descriptor) {
+   # Function that reads an UXD file which contains several ranges
+   # (created in a programmed run, for example)
+   # Arguments
+   # :: uxdfile (filename with extension)
+   # :: range.descriptor (an array with as many elements as
+   #    there are ranges in the uxdfile)
+   # Returns: dataframe with 3 columns
+   
+   cchar <- "[;_]" #regexpr matching the comment characters used in Bruker's UXD
+   cdata <- "[0-9]" #regexpr matching one character of any digit
+   # Create filenames for the output # no longer used, return dataframe instead
+   #datafile <- paste(uxdfile,"-",range.descriptor,".data",sep="")
+   
+   # Read the input multirange file
+   ufile <- file(uxdfile, "r")
+   f <- readLines(ufile, n=-1) #read _all_ lines from UXD file
+   close(ufile)
+   
+   # This way we identify data rows by looking for numeric characters.
+   #wh <- regexpr("[0-9]", f)
+   # This way we identify header rows
+   # Later we will assume that all other rows are data
+   wh <- regexpr(cchar, f)
+   
+   mh <- wh[1:length(wh)] # this gives you the corresponding index vector
+   # the value of each element corresponds to the position of the regexp match.
+   # value = 1 means the first character of the row is cchar (row is header)
+   # value =-1 means no cchar occur on the row (row is data)
+   
+   #length(mh[mh == -1]) #total number of datarows in uxdfile
+   #mh[mh > 1 | mh < 0] <- 0 #set all header-rows to zero (just to make things easier)
+   
+   i <- seq(1, length(mh) - 1, 1)
+   j <- seq(2, length(mh), 1)
+   starts <- which(mh[i] == 1 & mh[j] != 1) + 1 #start indices
+   ends   <- which(mh[i] != 1 & mh[j] == 1) #end indices, except the last
+   ends   <- c(ends, length(mh)) #fixed the last index of ends   
+   
+   ff <- data.frame(NULL)
+   for (s in 1:length(range.descriptor)) {
+      zz <- textConnection(f[starts[s]:ends[s]], "r")
+      ff <- rbind(ff, data.frame(range.descriptor[s],
+            matrix(scan(zz, what = numeric()), ncol=2, byrow=T)))
+      close(zz)
+   }
+   names(ff) <- c("sampleid", "angle", "intensity")
+   
+   # Return dataframe
+   ff
+}

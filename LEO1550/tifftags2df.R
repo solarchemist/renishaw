@@ -1,13 +1,4 @@
-# LEO1550.R
-# Functions to read and manipulate data from the LEO1550 scanning electron microscope
-# Taha Ahmed, March 2011
-
-# CONTENTS
 source("/home/taha/chepec/chetex/common/R/common.R")
-# >>>> tifftags2df
-
-
-
 
 ##################################################
 ################ tifftags2df #####################
@@ -137,22 +128,3 @@ tifftags2df <- function(tiffimage) {
       # 
       return(tagsdf)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
