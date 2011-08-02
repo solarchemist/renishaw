@@ -130,6 +130,7 @@ pdf2df <- function(pdffile) {
    # For example the PDF files produced by the PDF database at Angstrom's X-ray lab
    # NOTE: sometimes intensity values are specified as less than some value.
    #       In those cases, this function simply strips the less-than character.
+   #       (Perhaps not true, see the int.Tex column)
    # ARGS: pdffile (complete path and filename to PDF file)
    # VALUE: dataframe with 9 columns:
    #        thth angles (numeric),
@@ -137,10 +138,10 @@ pdf2df <- function(pdffile) {
    #        h index (numeric),
    #        k index (numeric),
    #        l index (numeric),
-   #        hkl indices (factor of strings),
-   #        hkl.TeX indices formatted for LaTeX (factor of strings),
+   #        hkl indices (string),
+   #        hkl.TeX indices formatted for LaTeX (string),
    #        intensity (numeric),
-   #        int.TeX intensity formatted for LaTeX (factor of strings)
+   #        int.TeX intensity formatted for LaTeX (string)
    # attr:  This function sets the following attributes:
    #        ApplicationName,
    #        ApplicationVersion,
@@ -155,7 +156,7 @@ pdf2df <- function(pdffile) {
    #
    angles <- data.frame(NULL)
    for (i in 1:length(pdf[["graphs"]][["stick_series"]])) {
-   angles <- rbind(angles, data.frame(#
+   angles <- rbind(angles, data.frame(stringsAsFactors = FALSE,#
       thth      = as.numeric(xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["theta"]])),
       d         = as.numeric(xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["da"]])),
       h         = as.numeric(xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["h"]])),
