@@ -1,3 +1,5 @@
+source("/home/taha/chepec/chetex/common/R/common/as.radians.R")
+
 ##################################################
 ################## scherrer ######################
 ##################################################
@@ -8,7 +10,7 @@ scherrer <- function(integralbreadth, thth, wavelength = 1.54056, shapeconstant 
    #       wavelength      - X-ray wavelength used (default 1.54056 A, Cu Ka)
    #       shapeconstant   - Scherrer constant (default spherical, ~0.9)
    # VALUE: vector with size parameters
-   ## REQUIRES: as.radians(), source("/home/taha/chepec/chetex/common/R/common.R")
+   ## REQUIRES: as.radians()
    D <- (shapeconstant * wavelength) / (as.radians(integralbreadth) * cos(as.radians(thth)))
    # cos() - angles must be in radians, not degrees!
    return(D) #units of angstrom

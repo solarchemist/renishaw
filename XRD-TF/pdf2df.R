@@ -5,8 +5,8 @@ pdf2df <- function(pdffile) {
    # Function for extracting information from ICDD PDF XML-files
    # For example the PDF files produced by the PDF database at Angstrom's X-ray lab
    # NOTE: sometimes intensity values are specified as less than some value.
-   #       In those cases, this function simply strips the less-than character.
-   #       (Perhaps not true, see the int.Tex column)
+   #       In those cases, the lt sign will be preserved in the column int.Tex.
+   #       The intensity column, on the other hand, is numeric and so strips off the lt sign.
    # ARGS: pdffile (complete path and filename to PDF file)
    # VALUE: dataframe with 9 columns:
    #        thth angles (numeric),

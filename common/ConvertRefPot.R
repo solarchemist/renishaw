@@ -1,6 +1,6 @@
-source(SHE2AVS.R)
-source(AVS2SHE.R)
-source(ConvertRefPotEC.R)
+source("/home/taha/chepec/chetex/common/R/common/SHE2AVS.R")
+source("/home/taha/chepec/chetex/common/R/common/AVS2SHE.R")
+source("/home/taha/chepec/chetex/common/R/common/ConvertRefPotEC.R")
 
 ##################################################
 ################# ConvertRefPot ##################
