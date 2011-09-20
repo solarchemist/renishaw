@@ -1,9 +1,7 @@
-##################################################
-#################### edspk #######################
-##################################################
-edspk <- function(eds.exp, kerpk = 1, fitmaxiter = 50) {
+edspk <- 
+   function(eds.exp, kerpk = 1, fitmaxiter = 50, gam = 1.0, scl.factor = 0.1, maxwdth=0.20) {
    
-   eds.base <- baselinefit(eds.exp, tau=2.0, gam=1.0, scl.factor=3.0, maxwdth=0.20)
+   eds.base <- baselinefit(eds.exp, tau=2.0, gam=gam, scl.factor=scl.factor, maxwdth=maxwdth)
    
    # This loop deals with the output from baselinefit()
    # It makes a "melted" dataframe in long form for each 

@@ -1,5 +1,5 @@
 xrfpk <- 
-   function(data.exp, kerpk = 1, fitmaxiter = 50, gam = 0.6, scl.factor = 0.1, maxwdth = 200) {
+   function(data.exp, kerpk = 1, fitmaxiter = 50, gam = 0.6, scl.factor = 0.1, maxwdth = 10) {
    
    print("... Starting baseline fitting")
       

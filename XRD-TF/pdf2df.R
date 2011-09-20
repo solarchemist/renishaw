@@ -1,6 +1,3 @@
-##################################################
-################### pdf2df #######################
-##################################################
 pdf2df <- function(pdffile) {
    # Function for extracting information from ICDD PDF XML-files
    # For example the PDF files produced by the PDF database at Angstrom's X-ray lab
@@ -17,7 +14,8 @@ pdf2df <- function(pdffile) {
    #        hkl indices (string),
    #        hkl.TeX indices formatted for LaTeX (string),
    #        intensity (numeric),
-   #        int.TeX intensity formatted for LaTeX (string)
+   #        int.TeX intensity formatted for LaTeX (string),
+   #        pdfNumber (string)
    # attr:  This function sets the following attributes:
    #        ApplicationName,
    #        ApplicationVersion,
@@ -56,7 +54,8 @@ pdf2df <- function(pdffile) {
                      xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["l"]])),
                   "$}", sep = "", collapse = ""),
       intensity = as.numeric(gsub(rmchar, "", xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["intensity"]]))),
-      int.TeX   = paste("{", xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["intensity"]]), "}", sep = "")
+      int.TeX   = paste("{", xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["intensity"]]), "}", sep = ""),
+      pdfNumber = xmlValue(pdf[["pdf_data"]][["pdf_number"]])
       ))
    }
    #
