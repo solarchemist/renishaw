@@ -19,7 +19,6 @@ pdf2df <- function(pdffile) {
    # attr:  This function sets the following attributes:
    #        ApplicationName,
    #        ApplicationVersion,
-   #        pdfNumber,
    #        chemicalformula,
    #        empiricalformula,
    #        wavelength
@@ -55,13 +54,14 @@ pdf2df <- function(pdffile) {
                   "$}", sep = "", collapse = ""),
       intensity = as.numeric(gsub(rmchar, "", xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["intensity"]]))),
       int.TeX   = paste("{", xmlValue(pdf[["graphs"]][["stick_series"]][[i]][["intensity"]]), "}", sep = ""),
-      pdfNumber = xmlValue(pdf[["pdf_data"]][["pdf_number"]])
+      pdfNumber = xmlValue(pdf[["pdf_data"]][["pdf_number"]]),
+      formula   = gsub("[ ]", "", xmlValue(pdf[["pdf_data"]][["empirical_formula"]])) 
       ))
    }
    #
    attr(angles, "ApplicationName") <- xmlAttrs(pdf)[[1]]
    attr(angles, "ApplicationVersion") <- xmlAttrs(pdf)[[2]]
-   attr(angles, "pdfNumber") <- xmlValue(pdf[["pdf_data"]][["pdf_number"]])
+   #attr(angles, "pdfNumber") <- xmlValue(pdf[["pdf_data"]][["pdf_number"]])
    attr(angles, "chemicalformula") <- gsub("[ ]", "", xmlValue(pdf[["pdf_data"]][["chemical_formula"]]))
    attr(angles, "empiricalformula") <- gsub("[ ]", "", xmlValue(pdf[["pdf_data"]][["empirical_formula"]]))
    attr(angles, "wavelength") <- as.numeric(xmlValue(pdf[["graphs"]][["wave_length"]]))
