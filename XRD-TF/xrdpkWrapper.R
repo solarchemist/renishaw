@@ -39,22 +39,39 @@ xrdpkWrapper <-
       
       return(xrdres)
    } else {
+      # File does not exist
+      # OR override is TRUE
       
       print("... Started else-clause 1")
       
-      if (!exists("xrdres")) {
+      # If file does not exist at all, run all necessary code to re-create it
+      if (!file.exists(xrddatafile)) {
          xrdres <- list()
          print("... xrdres list created")
-      }   
-      
-      # Need to call xrdpk() and save its results to file as above
-      xrdres[[run]] <- xrdpk(data.exp, 
-                             kerpk = kerpk, 
-                             fitmaxiter = fitmaxiter, 
-                             gam = gam, 
-                             scl.factor = scl.factor,
-                             maxwdth = maxwdth)
-      save(xrdres, file = xrddatafile)
+         
+         xrdres[[run]] <- 
+            xrdpk(data.exp, 
+                  kerpk = kerpk, 
+                  fitmaxiter = fitmaxiter, 
+                  gam = gam, 
+                  scl.factor = scl.factor,
+                  maxwdth = maxwdth)
+         
+         save(xrdres, file = xrddatafile)
+      } else {
+         # File already exists, but override is TRUE
+         load(file = xrddatafile)
+         
+         xrdres[[run]] <- 
+            xrdpk(data.exp, 
+                  kerpk = kerpk, 
+                  fitmaxiter = fitmaxiter, 
+                  gam = gam, 
+                  scl.factor = scl.factor,
+                  maxwdth = maxwdth)
+         
+         save(xrdres, file = xrddatafile)
+      }
       
       print("... Ended else-clause 1")
       

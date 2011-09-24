@@ -67,6 +67,7 @@ xrdpk <-
                        height = xrd.fit[[s]]$parpks[kernel, "height"],
                        area   = xrd.fit[[s]]$parpks[kernel, "intens"],
                        fwhm   = xrd.fit[[s]]$parpks[kernel, "FWHM"],
+                       beta   = xrd.fit[[s]]$parpks[kernel, "intens"] / xrd.fit[[s]]$parpks[kernel, "height"],
                        m      = xrd.fit[[s]]$parpks[kernel, "m"],
                        accept = xrd.fit[[s]]$accept))
          xrd.fit.fitpk <- rbind(xrd.fit.fitpk, 

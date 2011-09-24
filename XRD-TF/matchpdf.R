@@ -63,7 +63,11 @@ matchpdf <- function(expcol, pdfrow) {
    if (sum(rowSums(diff.indx)) == sum(colSums(diff.indx))) {
       # Reset mtch
       mtch <- list()
-      mtch <- list(csums = colSums(diff.indx), rsums = rowSums(diff.indx), expthth = expcol[colSums(diff.indx) != 0], pdfthth = pdfrow[rowSums(diff.indx) != 0], deltathth = expcol[colSums(diff.indx) != 0] - pdfrow[rowSums(diff.indx) != 0])
+      mtch <- list(csums = colSums(diff.indx), 
+                   rsums = rowSums(diff.indx), 
+                   expthth = expcol[colSums(diff.indx) != 0], 
+                   pdfthth = pdfrow[rowSums(diff.indx) != 0], 
+                   deltathth = expcol[colSums(diff.indx) != 0] - pdfrow[rowSums(diff.indx) != 0])
       # List of 5
       # $ csums     : num - consisting of ones and zeroes. Shows you which positions of expcol matched.
       # $ rsums     : num - consisting of ones and zeroes. Shows you which positions of pdfrow matched.
