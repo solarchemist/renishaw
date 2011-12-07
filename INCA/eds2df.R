@@ -1,3 +1,6 @@
+## This function should be renamed to EMSA2df(). The file it reads is a so-called EMSA spectral data file.
+# /TA, 111110
+
 eds2df <- function(edstxtfile) {
    ## Description:
    ##   Reads EDS textfile from INCA EDS.

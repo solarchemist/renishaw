@@ -3,18 +3,16 @@ source("/home/taha/chepec/chetex/common/R/common/int2padstr.R")
 
 
 ##################################################
-################### muxd2df ######################
+#!!!!!!!!!!!!!!!!!# mraw2df #!!!!!!!!!!!!!!!!!!!!#
 ##################################################
-muxd2df <- function(uxdfile) {
+mraw2df <- function(txtfile) {
    ## Description:
-   ##   Reads UXD files with one or multiple ranges (converted using XCH v1.0)
+   ##   Reads TXT files with one or multiple ranges (XRD commander "save as txt")
    ##   Extracts both data (thth, intensity) and parameters
-   ##   Also automatically calculates cps if counts are present, and vice versa
-   ##   (note that this depends on specific strings in the UXD format).
    ## Usage:
-   ##   muxd2df(uxdfile)
+   ##   mraw2df(txtfile)
    ## Arguments:
-   ##   uxdfile: text string with full path to UXD file, which may
+   ##   txtfile: text string with full path to TXT file, which may
    ##            containing single or multiple data ranges
    ## Value:
    ##   Dataframe with the following columns:
