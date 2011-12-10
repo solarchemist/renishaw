@@ -1,7 +1,0 @@
-# Renishaw.R
-# Functions to read data from the Renishaw Raman spectrometer
-# Taha Ahmed, Feb 2011
-
-# CONTENTS
-# >>>> Raman2df
-# >>>> Ramanpk

@@ -1,7 +1,0 @@
-# AUTOLAB.R
-# Functions to read and manipulate data from AUTOLAB potentiostats/galvanostats
-# Taha Ahmed, June 2011
-
-# CONTENTS
-# >>>> amp2df
-# >>>> ocp2df

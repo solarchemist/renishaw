@@ -1,8 +1,0 @@
-print.xtable.booktabs <- function(x){
-   # Make xtable print booktabs tables
-   # ARGS: x (matrix)
-   require(xtable)
-   print(xtable(x), floating=F, hline.after=NULL,
-    add.to.row=list(pos=list(-1,0, nrow(x)),
-    command=c("\\toprule ", "\\midrule ", "\\bottomrule ")))
-}

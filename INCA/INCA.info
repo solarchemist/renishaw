@@ -1,8 +1,0 @@
-# INCA.R
-# Functions to read and manipulate data from the Oxford INCA EDS
-# Taha Ahmed, April 2011
-
-# CONTENTS
-source("/home/taha/chepec/chetex/common/R/common.R")
-# >>>> eds2df
-# >>>> edspk
