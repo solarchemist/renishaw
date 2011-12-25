@@ -2,3 +2,5 @@ I wanted to run the \texttt{diffractometry} peak-analysis code (which can be bot
 
 For that purpose, I created this wrapper function.
 Its job is to call \Rfun{Ramanpk()} only if necessary (i.e., peak analysis has not already been performed). That is made possible by saving the results of a successful analysis to a \texttt{raman-peak-data.rda} file in the directory of the report.
+
+Also includes an override option to force re-running of peak analysis.

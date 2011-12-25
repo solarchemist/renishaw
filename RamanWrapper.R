@@ -1,7 +1,6 @@
 RamanWrapper <- 
    function(data.exp, run, override = FALSE, 
             kerpk = 1, fitmaxiter = 50, gam = 0.6, scl.factor = 0.1) { 
-   # the override flag is currently not used
       
    print("... Started RamanWrapper")
       
@@ -13,7 +12,7 @@ RamanWrapper <-
    
    
    
-   if (file.exists(ramandatafile)) {
+   if (file.exists(ramandatafile) && !override) {
       print("... Started if-clause 1")
       
       # File already exists
@@ -40,25 +39,41 @@ RamanWrapper <-
       
       return(ramres)
    } else {
+      # File does not exist, OR override is TRUE
       
       print("... Started else-clause 1")
-      
-      if (!exists("ramres")) {
+
+      # If file does not exist at all, run all necessary code to re-create it
+      if (!file.exists(ramandatafile)) {
          ramres <- list()
          print("... ramres list created")
-      }   
-      
-      # Need to call Ramanpk() and save its results to file as above
-      ramres[[run]] <- Ramanpk(data.exp, 
-                               kerpk = kerpk, 
-                               fitmaxiter = fitmaxiter, 
-                               gam = gam, 
-                               scl.factor = scl.factor)
-      save(ramres, file = ramandatafile)
+         
+         ramres[[run]] <- 
+            Ramanpk(data.exp, 
+                    kerpk = kerpk, 
+                    fitmaxiter = fitmaxiter, 
+                    gam = gam, 
+                    scl.factor = scl.factor)
+                     # add maxwdth arg?
+         
+         save(ramres, file = ramandatafile)
+      } else {
+         # File already exists, but override IS TRUE
+         load(file = ramandatafile)
+         
+         ramres[[run]] <- 
+            Ramanpk(data.exp, 
+                    kerpk = kerpk, 
+                    fitmaxiter = fitmaxiter, 
+                    gam = gam, 
+                    scl.factor = scl.factor)
+                    # add maxwdth arg?
+
+         save(ramres, file = ramandatafile)
+      }
       
       print("... Ended else-clause 1")
       
       return(ramres)
    }
-      
 }
