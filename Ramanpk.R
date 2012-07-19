@@ -1,13 +1,20 @@
 Ramanpk <- 
-   function(data.exp, kerpk = 1, fitmaxiter = 50, gam = 0.6, scl.factor = 0.1) {
+   function(data.exp, 
+            override = FALSE, 
+            kerpk = 1, 
+            fitmaxiter = 50, 
+            gam = 0.6, 
+            scl.factor = 0.1,
+            tau = 2.0,
+            maxwdth = 200) {
    
    print("... Starting baseline fitting")
       
    data.basl <- baselinefit(data.exp, 
-                            tau = 2.0, 
+                            tau = tau, 
                             gam = gam, 
                             scl.factor = scl.factor, 
-                            maxwdth = 200)
+                            maxwdth = maxwdth)
    
    print("... Ended baseline fitting")
    
