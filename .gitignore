@@ -1,6 +1,5 @@
-*.info
-*.RData
-*.Rdeprecated
-*.Rhistory
-*.Rhistory.save
-*.ROLD
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rbuildignore
