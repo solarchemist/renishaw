@@ -29,4 +29,3 @@ a Ramanpk dataframe
 This is a more restricted wrapper, specifically intended for
 use with silicon reference spectra.
 }
-

@@ -23,4 +23,3 @@ as well as interpolated wavenumber and counts values
 (interpolated data is evenly spaced along x-axis, required for later peak fitting
 with diffractometry package).
 }
-

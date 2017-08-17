@@ -138,8 +138,7 @@ Ramanpk <-
 #' For that purpose, I created this wrapper function.
 #' Its job is to call \code{\link{Ramanpk}} only if necessary (i.e., peak analysis
 #' has not already been performed). That is made possible by saving the results
-#' of a successful analysis to a \code{raman-peak-data.rda} file in the directory
-#' of the report.
+#' of a successful analysis to a file on disk (in the current working directory).
 #' Also includes an override option to force re-running of peak analysis.
 #'
 #' @param data.exp     dataframe with experimental data (format?)
@@ -151,6 +150,7 @@ Ramanpk <-
 #' @param scl.factor   sclerosis factor (passed to Ramanpk())
 #' @param tau          tau (passed to Ramanpk())
 #' @param maxwdth      peak max width (passed to Ramanpk())
+#' @param jobfile      filename of data saved to disk, defaults to raman-peak-data.rda
 #'
 #' @return a Ramanpk dataframe
 #' @export
@@ -163,7 +163,8 @@ RamanWrapper <-
             gam = 0.6,
             scl.factor = 0.1,
             tau = 2.0,
-            maxwdth = 200) {
+            maxwdth = 200,
+            jobfile = "raman-peak-data.rda") {
       # the override flag IS IN USE
 
       print("... Started RamanWrapper")
@@ -171,8 +172,7 @@ RamanWrapper <-
       # check if Ramanpk has already completed successfully for the current job
       current.dirname <- getwd()
       print(current.dirname)
-      current.filename <- "raman-peak-data.rda"
-      ramandatafile <- paste(current.dirname, current.filename, sep = "/")
+      ramandatafile <- paste(current.dirname, jobfile, sep = "/")
 
 
       # What follows are three if-clauses (containing no else-statements).

@@ -18,4 +18,3 @@ Warning: this function needs the following variables to exist in the global name
 - obs
 (this should be changed!). But for now, watch out.
 }
-

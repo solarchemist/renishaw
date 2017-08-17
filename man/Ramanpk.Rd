@@ -32,4 +32,3 @@ This is the actual workhorse that does the peak fitting for each spectra.
 Note: this function only works for a single spectra and does not handle
       saving the output and so on. Always use one of the wrapper functions.
 }
-

@@ -5,7 +5,8 @@
 \title{Use this wrapper function for calling Ramanpk}
 \usage{
 RamanWrapper(data.exp, run, override = FALSE, kerpk = 1, fitmaxiter = 50,
-  gam = 0.6, scl.factor = 0.1, tau = 2, maxwdth = 200)
+  gam = 0.6, scl.factor = 0.1, tau = 2, maxwdth = 200,
+  jobfile = "raman-peak-data.rda")
 }
 \arguments{
 \item{data.exp}{dataframe with experimental data (format?)}
@@ -25,6 +26,8 @@ RamanWrapper(data.exp, run, override = FALSE, kerpk = 1, fitmaxiter = 50,
 \item{tau}{tau (passed to Ramanpk())}
 
 \item{maxwdth}{peak max width (passed to Ramanpk())}
+
+\item{jobfile}{filename of data saved to disk, defaults to raman-peak-data.rda}
 }
 \value{
 a Ramanpk dataframe
@@ -36,8 +39,6 @@ to re-run the peak analysis every time the document is re-compiled.
 For that purpose, I created this wrapper function.
 Its job is to call \code{\link{Ramanpk}} only if necessary (i.e., peak analysis
 has not already been performed). That is made possible by saving the results
-of a successful analysis to a \code{raman-peak-data.rda} file in the directory
-of the report.
+of a successful analysis to a file on disk (in the current working directory).
 Also includes an override option to force re-running of peak analysis.
 }
-
