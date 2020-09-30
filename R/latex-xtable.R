@@ -11,12 +11,15 @@
 #' @export
 ResetTabAttributes <- function(table.object) {
    xtable::caption(table.object) <-
-      paste(obs$substrateid[tp], "-", common::int2padstr(tp, "0", 3), " (area ", obs$sampling.area[tp], ")",
-            ", ", obs$objective.mag[tp],
-            ", \\SI{", obs$exposure.time[tp], "}{\\second}",
-            ", ", obs$accumulations[tp], " acc.",
-            ", \\SI{", obs$laser.power[tp], "}{\\percent}", sep = "")
-   xtable::label(table.object) <- paste("tab:peak-table-", common::int2padstr(tp, "0", 3), sep = "")
+      paste0(
+        obs$substrateid[tp], "-", common::int2padstr(tp, "0", 3),
+        " (area ", obs$sampling.area[tp], ")",
+        ", ", obs$objective.mag[tp],
+        ", \\SI{", obs$exposure.time[tp], "}{\\second}",
+        ", ", obs$accumulations[tp], " acc.",
+        ", \\SI{", obs$laser.power[tp], "}{\\percent}")
+   xtable::label(table.object) <-
+     paste("tab:peak-table-", common::int2padstr(tp, "0", 3), sep = "")
    names(table.object) <-
       c("{Peak}",
         "{Kernel}",

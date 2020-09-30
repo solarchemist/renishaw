@@ -4,9 +4,18 @@
 \alias{RamanWrapper}
 \title{Use this wrapper function for calling Ramanpk}
 \usage{
-RamanWrapper(data.exp, run, override = FALSE, kerpk = 1, fitmaxiter = 50,
-  gam = 0.6, scl.factor = 0.1, tau = 2, maxwdth = 200,
-  jobfile = "raman-peak-data.rda")
+RamanWrapper(
+  data.exp,
+  run,
+  override = FALSE,
+  kerpk = 1,
+  fitmaxiter = 50,
+  gam = 0.6,
+  scl.factor = 0.1,
+  tau = 2,
+  maxwdth = 200,
+  jobfile = ""
+)
 }
 \arguments{
 \item{data.exp}{dataframe with experimental data (format?)}
@@ -27,7 +36,7 @@ RamanWrapper(data.exp, run, override = FALSE, kerpk = 1, fitmaxiter = 50,
 
 \item{maxwdth}{peak max width (passed to Ramanpk())}
 
-\item{jobfile}{filename of data saved to disk, defaults to raman-peak-data.rda}
+\item{jobfile}{path to datafile saved to disk, defaults to ./raman-peak-data.rda}
 }
 \value{
 a Ramanpk dataframe

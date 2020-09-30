@@ -4,8 +4,16 @@
 \alias{SiliconWrapper}
 \title{Use this wrapper function for silicon spectra}
 \usage{
-SiliconWrapper(data.exp, run, override = FALSE, kerpk = 1,
-  fitmaxiter = 50, gam = 0.6, scl.factor = 0.1)
+SiliconWrapper(
+  data.exp,
+  run,
+  override = FALSE,
+  kerpk = 1,
+  fitmaxiter = 50,
+  gam = 0.6,
+  scl.factor = 0.1,
+  jobfile = ""
+)
 }
 \arguments{
 \item{data.exp}{dataframe with experimental data (format?)}
@@ -21,6 +29,8 @@ SiliconWrapper(data.exp, run, override = FALSE, kerpk = 1,
 \item{gam}{gam (diffractometry option)}
 
 \item{scl.factor}{sclerosis factor (diffractometry option)}
+
+\item{jobfile}{path to datafile saved to disk, defaults to ./silicon-peak-data.rda}
 }
 \value{
 a Ramanpk dataframe

@@ -4,8 +4,16 @@
 \alias{Ramanpk}
 \title{Raman peak fit}
 \usage{
-Ramanpk(data.exp, override = FALSE, kerpk = 1, fitmaxiter = 50,
-  gam = 0.6, scl.factor = 0.1, tau = 2, maxwdth = 200)
+Ramanpk(
+  data.exp,
+  override = FALSE,
+  kerpk = 1,
+  fitmaxiter = 50,
+  gam = 0.6,
+  scl.factor = 0.1,
+  tau = 2,
+  maxwdth = 200
+)
 }
 \arguments{
 \item{data.exp}{dataframe with experimental data (format?)}
