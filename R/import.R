@@ -15,34 +15,49 @@
 #'    $ cts.interp      : interpolated counts vector
 #' @export
 Raman2df <- function(datafilename) {
-   chifile <- readLines(datafilename, n = -1)
 
+   chifile <- base::readLines(datafilename, n = -1)
    sampleid <- common::ProvideSampleId(datafilename)
 
    ff <- data.frame(NULL)
-   zz <- textConnection(chifile, "r")
-   ff <- rbind(ff, data.frame(stringsAsFactors = FALSE,
-                              sampleid,
-                              matrix(scan(zz, what = numeric(), sep = "\t"),
-                                     ncol = 2, byrow = T)))
+   zz <- base::textConnection(chifile, "r")
+   ff <-
+      base::rbind(
+         ff,
+         data.frame(
+            sampleid,
+            base::matrix(
+               base::scan(
+                  zz,
+                  what = numeric(),
+                  sep = "\t"),
+               ncol = 2,
+               byrow = TRUE),
+            stringsAsFactors = FALSE))
    close(zz)
    names(ff) <- c("sampleid", "wavenum", "counts")
+
    # Sort dataframe by increasing wavenumbers
    ff <- ff[order(ff$wavenum), ]
    # ... sort the rownames as well
    row.names(ff) <- seq(1, dim(ff)[1])
-   # Add interpolated, evenly spaced data to dataframe
-   ff <- cbind(ff,
-               wnum.interp =
-                  stats::approx(x = ff$wavenum,
-                                y = ff$counts,
-                                method = "linear",
-                                n = length(ff$wavenum))$x,
-               cts.interp =
-                  stats::approx(x = ff$wavenum,
-                                y = ff$counts,
-                                method = "linear",
-                                n = length(ff$wavenum))$y)
-   ##
+
+   # Create evenly spaced datapoints by interpolating
+   ff <-
+      base::cbind(
+         ff,
+         wnum.interp =
+            stats::approx(
+               x = ff$wavenum,
+               y = ff$counts,
+               method = "linear",
+               n = length(ff$wavenum))$x,
+         cts.interp =
+            stats::approx(
+               x = ff$wavenum,
+               y = ff$counts,
+               method = "linear",
+               n = length(ff$wavenum))$y)
+
    return(ff)
 }
