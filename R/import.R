@@ -6,46 +6,48 @@
 #' with diffractometry package).
 #'
 #' @param datafilename text string with full path to experimental file
+#' @param sampleid sampleid (optional, automatically created if not provided)
 #'
-#' @return Dataframe with the following columns (and no extra attributes):
+#' @return Tibble with the following columns (and possibly some attributes):
 #'    $ sampleid        : char
 #'    $ wavenum         : numeric
 #'    $ counts          : numeric
 #'    $ wnum.interp     : interpolated wavenumber vector (equidistant)
 #'    $ cts.interp      : interpolated counts vector
 #' @export
-Raman2df <- function(datafilename) {
+#' @importFrom dplyr "%>%"
+#' @importFrom rlang .data
+Raman2df <- function(datafilename, sampleid = "") {
 
-   chifile <- base::readLines(datafilename, n = -1)
-   sampleid <- common::ProvideSampleId(datafilename)
+   if (sampleid == "") {
+      # assume the user did not set sampleid
+      this.sampleid <- common::ProvideSampleId(datafilename)
+   } else {
+      # assume the user explicitly specified sampleid, use it
+      this.sampleid <- sampleid
+   }
 
-   ff <- data.frame(NULL)
-   zz <- base::textConnection(chifile, "r")
    ff <-
-      base::rbind(
-         ff,
-         data.frame(
-            sampleid,
-            base::matrix(
-               base::scan(
-                  zz,
-                  what = numeric(),
-                  sep = "\t"),
-               ncol = 2,
-               byrow = TRUE),
-            stringsAsFactors = FALSE))
-   close(zz)
-   names(ff) <- c("sampleid", "wavenum", "counts")
-
-   # Sort dataframe by increasing wavenumbers
-   ff <- ff[order(ff$wavenum), ]
-   # ... sort the rownames as well
-   row.names(ff) <- seq(1, dim(ff)[1])
+      readr::read_tsv(
+         file = datafilename,
+         # datafiles expected to contain column labels: "#Wave #Intensity"
+         # force read_tsv to discard empty third column that it detects
+         # because the header row uses two tabs as separator
+         col_select = 1:2,
+         col_names = c("wavenum", "counts"),
+         # since we set col_names explicitly, we need to skip the first row
+         # in the datafile which contains column labels
+         skip = 1,
+         col_types = "dd") %>%
+      tibble::add_column(
+         sampleid = this.sampleid,
+         .before = "wavenum") %>%
+      # sort dataframe by increasing wavenumbers
+      dplyr::arrange(.data$wavenum)
 
    # Create evenly spaced datapoints by interpolating
-   ff <-
-      base::cbind(
-         ff,
+   ff <- ff %>%
+      dplyr::bind_cols(
          wnum.interp =
             stats::approx(
                x = ff$wavenum,

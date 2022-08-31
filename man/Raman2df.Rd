@@ -4,13 +4,15 @@
 \alias{Raman2df}
 \title{Import Renishaw Raman spectra files (ASCII)}
 \usage{
-Raman2df(datafilename)
+Raman2df(datafilename, sampleid = "")
 }
 \arguments{
 \item{datafilename}{text string with full path to experimental file}
+
+\item{sampleid}{sampleid (optional, automatically created if not provided)}
 }
 \value{
-Dataframe with the following columns (and no extra attributes):
+Tibble with the following columns (and possibly some attributes):
    $ sampleid        : char
    $ wavenum         : numeric
    $ counts          : numeric

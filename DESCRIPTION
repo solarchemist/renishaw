@@ -1,7 +1,7 @@
 Package: renishaw
 Type: Package
 Title: Import Renishaw Raman spectra files (in ASCII format)
-Version: 0.0.1.9000
+Version: 0.1.0.9000
 Authors@R: person("Taha", "Ahmed", email = "taha@chepec.se", role = c("aut", "cre"))
 Description: Import Renishaw Raman spectra files (in ASCII format) to dataframe,
     and baseline and peak fit using the diffractometry package.
@@ -10,7 +10,11 @@ Encoding: UTF-8
 LazyData: TRUE
 Imports:
     common,
+    diffractometry,
+    dplyr,
+    readr,
+    rlang,
     stats,
-    xtable,
-    diffractometry
-RoxygenNote: 7.1.1
+    tibble,
+    xtable
+RoxygenNote: 7.2.1
